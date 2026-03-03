@@ -19,23 +19,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.calculator.data.local.Entity
 import com.example.calculator.data.local.CalculatorDatabase
 import com.example.calculator.data.repository.Repository
+import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun HistoryScreen(
     onBack: () -> Unit,
-    context: Context = LocalContext.current
+    viewModel: HistoryViewModel = koinViewModel()
 ) {
-    val repository = remember {
-        Repository(
-            CalculatorDatabase.getInstance(context).calculationDao()
-        )
-    }
-
-    val viewModel: HistoryViewModel = viewModel(
-        factory = HistoryViewModel.Factory(repository)
-    )
+    val viewModel: HistoryViewModel = viewModel()
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

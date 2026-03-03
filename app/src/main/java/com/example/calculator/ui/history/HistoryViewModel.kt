@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 class HistoryViewModel(
     private val repository: Repository
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(HistoryUiState())
     val uiState: StateFlow<HistoryUiState> = _uiState.asStateFlow()
 
@@ -36,14 +35,6 @@ class HistoryViewModel(
     fun clearHistory() {
         viewModelScope.launch {
             repository.clearHistory()
-        }
-    }
-
-    // Фабрика
-    class Factory(private val repository: Repository) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            @Suppress("UNCHECKED_CAST")
-            return HistoryViewModel(repository) as T
         }
     }
 }

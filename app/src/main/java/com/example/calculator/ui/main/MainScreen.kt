@@ -36,27 +36,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.calculator.data.local.CalculatorDatabase
 import com.example.calculator.data.repository.Repository
-import com.example.calculator.ui.ViewModelFactory
 import kotlinx.coroutines.flow.StateFlow
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainScreen(
     onHistoryClick: () -> Unit,
-    context: Context = LocalContext.current
+    viewModel: MainViewModel = koinViewModel()
 ) {
-    val repository = remember {
-        Repository(CalculatorDatabase.getInstance(context).calculationDao())
-    }
-
-    val viewModel: MainViewModel = viewModel(
-        factory = ViewModelFactory(repository)
-    )
-
     // НЕ читаем uiState здесь
     Scaffold(
         topBar = {
             CalculatorTopBar(
-                onCloseClick = { (context as? Activity)?.finish() },
+                onCloseClick = { },
                 onHistoryClick = onHistoryClick
             )
         },
