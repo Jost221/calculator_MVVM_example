@@ -44,11 +44,12 @@ fun MainScreen(
     onHistoryClick: () -> Unit,
     viewModel: MainViewModel = koinViewModel()
 ) {
-    // НЕ читаем uiState здесь
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             CalculatorTopBar(
-                onCloseClick = { },
+                onCloseClick = { (context as? Activity)?.finish() },
                 onHistoryClick = onHistoryClick
             )
         },
@@ -61,7 +62,6 @@ fun MainScreen(
                 Log.i("construct", "AllView")
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Читаем state внутри самого компонента
                 CalculatorDisplay(
                     stateFlow = viewModel.uiState
                 )
