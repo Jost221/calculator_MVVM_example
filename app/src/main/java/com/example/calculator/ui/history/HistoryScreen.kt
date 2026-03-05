@@ -1,6 +1,5 @@
 package com.example.calculator.ui.history
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,15 +9,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.calculator.data.local.Entity
-import com.example.calculator.data.local.CalculatorDatabase
-import com.example.calculator.data.repository.Repository
 import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,8 +23,6 @@ fun HistoryScreen(
     onBack: () -> Unit,
     viewModel: HistoryViewModel = koinViewModel()
 ) {
-    val viewModel: HistoryViewModel = viewModel()
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
@@ -40,26 +33,23 @@ fun HistoryScreen(
             )
         }
     ) { padding ->
-        when {
-            uiState.isLoading -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
+        val contentModifier = Modifier.padding(padding)
+        if (uiState.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
             }
-            uiState.calculations.isEmpty() -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("История пуста", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
-                }
+        } else if (uiState.calculations.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("История пуста", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
             }
-            else -> {
-                LazyColumn(
-                    modifier = Modifier.padding(padding),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(uiState.calculations) { item ->
-                        HistoryItem(item)
-                    }
+        } else {
+            LazyColumn(
+                modifier = contentModifier,
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(uiState.calculations) { item ->
+                    HistoryItem(item)
                 }
             }
         }
@@ -102,11 +92,25 @@ fun HistoryItem(item: Entity) {
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = item.expression,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = item.expression,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+                item.country?.let { country ->
+                    Text(
+                        text = country,
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
             Text(
                 text = "= ${item.result}",
                 fontSize = 24.sp,

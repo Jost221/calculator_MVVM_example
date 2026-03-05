@@ -9,5 +9,6 @@ data class Entity(
     val id: Long = 0,
     val expression: String,
     val result: String,
+    val country: String? = null,
     val timestamp: Long = System.currentTimeMillis()
 )

@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Entity::class], version = 1)
+@Database(entities = [Entity::class], version = 2)
 abstract class CalculatorDatabase : RoomDatabase() {
 
     abstract fun calculationDao(): Dao
@@ -20,7 +20,9 @@ abstract class CalculatorDatabase : RoomDatabase() {
                     context.applicationContext,
                     CalculatorDatabase::class.java,
                     "calculator_db"
-                ).build().also { INSTANCE = it }
+                )
+                .fallbackToDestructiveMigration(dropAllTables = true)
+                .build().also { INSTANCE = it }
             }
         }
     }

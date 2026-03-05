@@ -51,7 +51,11 @@ class MainViewModel(val repository: Repository) : ViewModel() {
 
     private fun clear() {
         _uiState.update {
-            UiState()
+            it.copy(
+                expression = "",
+                preview = "",
+                error = null
+            )
         }
     }
 

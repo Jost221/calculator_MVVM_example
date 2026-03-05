@@ -1,7 +1,6 @@
 package com.example.calculator.ui.main
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,19 +22,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.calculator.data.local.CalculatorDatabase
-import com.example.calculator.data.repository.Repository
 import kotlinx.coroutines.flow.StateFlow
 import org.koin.androidx.compose.koinViewModel
 
@@ -60,6 +54,7 @@ fun MainScreen(
                     .fillMaxSize()
             ) {
                 Log.i("construct", "AllView")
+
                 Spacer(modifier = Modifier.weight(1f))
 
                 CalculatorDisplay(
@@ -111,6 +106,7 @@ fun CalculatorTopBar(
         )
     )
 }
+
 @Composable
 fun CalculatorDisplay(
     stateFlow: StateFlow<UiState>,
@@ -179,6 +175,7 @@ fun CalculatorKeyboard(
         }
     }
 }
+
 @Composable
 fun CalcButton(
     label: String,
